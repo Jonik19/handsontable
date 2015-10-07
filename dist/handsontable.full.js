@@ -7,13 +7,13 @@
  * Licensed under the MIT license.
  * http://handsontable.com/
  *
- * Date: Fri Oct 02 2015 12:37:12 GMT+0200 (CEST)
+ * Date: Wed Oct 07 2015 19:02:54 GMT+0300 (EEST)
  */
 /*jslint white: true, browser: true, plusplus: true, indent: 4, maxerr: 50 */
 
 window.Handsontable = {
   version: '0.19.0',
-  buildDate: 'Fri Oct 02 2015 12:37:12 GMT+0200 (CEST)',
+  buildDate: 'Wed Oct 07 2015 19:02:54 GMT+0300 (EEST)',
 };
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Handsontable = f()}})(function(){var define,module,exports;return (function init(modules, cache, entry) {
   (function outer (modules, cache, entry) {
@@ -4024,7 +4024,7 @@ Handsontable.Core = function Core(rootElement, userSettings) {
           if (instance.getSettings().maxRows === instance.countRows()) {
             return;
           }
-          delta = datamap.createRow(index, amount);
+          delta = datamap.createRow(index, amount, source);
           if (delta) {
             if (selection.isSelected() && priv.selRange.from.row >= index) {
               priv.selRange.from.row = priv.selRange.from.row + delta;
@@ -4035,7 +4035,7 @@ Handsontable.Core = function Core(rootElement, userSettings) {
           }
           break;
         case 'insert_col':
-          delta = datamap.createCol(index, amount);
+          delta = datamap.createCol(index, amount, source);
           if (delta) {
             if (Array.isArray(instance.getSettings().colHeaders)) {
               var spliceArray = [index, 0];
@@ -4052,7 +4052,7 @@ Handsontable.Core = function Core(rootElement, userSettings) {
           break;
         case 'remove_row':
           index = instance.runHooks('modifyCol', index);
-          datamap.removeRow(index, amount);
+          datamap.removeRow(index, amount, source);
           priv.cellSettings.splice(index, amount);
           var totalRows = instance.countRows();
           var fixedRowsTop = instance.getSettings().fixedRowsTop;
@@ -4067,7 +4067,7 @@ Handsontable.Core = function Core(rootElement, userSettings) {
           selection.refreshBorders();
           break;
         case 'remove_col':
-          datamap.removeCol(index, amount);
+          datamap.removeCol(index, amount, source);
           for (var row = 0,
               len = datamap.getAll().length; row < len; row++) {
             if (row in priv.cellSettings) {
@@ -5754,7 +5754,7 @@ DataMap.prototype.getSchema = function() {
   }
   return this.duckSchema;
 };
-DataMap.prototype.createRow = function(index, amount, createdAutomatically) {
+DataMap.prototype.createRow = function(index, amount, source) {
   var row,
       colCount = this.instance.countCols(),
       numberOfCreatedRows = 0,
@@ -5787,11 +5787,11 @@ DataMap.prototype.createRow = function(index, amount, createdAutomatically) {
     numberOfCreatedRows++;
     currentIndex++;
   }
-  Handsontable.hooks.run(this.instance, 'afterCreateRow', index, numberOfCreatedRows, createdAutomatically);
+  Handsontable.hooks.run(this.instance, 'afterCreateRow', index, numberOfCreatedRows, source);
   this.instance.forceFullRender = true;
   return numberOfCreatedRows;
 };
-DataMap.prototype.createCol = function(index, amount, createdAutomatically) {
+DataMap.prototype.createCol = function(index, amount, source) {
   if (!this.instance.isColumnModificationAllowed()) {
     throw new Error('Cannot create new column. When data source in an object, ' + 'you can only have as much columns as defined in first data row, data schema or in the \'columns\' setting.' + 'If you want to be able to add new columns, you have to use array datasource.');
   }
@@ -5824,11 +5824,11 @@ DataMap.prototype.createCol = function(index, amount, createdAutomatically) {
     numberOfCreatedCols++;
     currentIndex++;
   }
-  Handsontable.hooks.run(this.instance, 'afterCreateCol', index, numberOfCreatedCols, createdAutomatically);
+  Handsontable.hooks.run(this.instance, 'afterCreateCol', index, numberOfCreatedCols, source);
   this.instance.forceFullRender = true;
   return numberOfCreatedCols;
 };
-DataMap.prototype.removeRow = function(index, amount) {
+DataMap.prototype.removeRow = function(index, amount, source) {
   if (!amount) {
     amount = 1;
   }
@@ -5847,10 +5847,10 @@ DataMap.prototype.removeRow = function(index, amount) {
   });
   data.length = 0;
   Array.prototype.push.apply(data, newData);
-  Handsontable.hooks.run(this.instance, 'afterRemoveRow', index, amount);
+  Handsontable.hooks.run(this.instance, 'afterRemoveRow', index, amount, source);
   this.instance.forceFullRender = true;
 };
-DataMap.prototype.removeCol = function(index, amount) {
+DataMap.prototype.removeCol = function(index, amount, source) {
   if (this.instance.dataType === 'object' || this.instance.getSettings().columns) {
     throw new Error('cannot remove column with object data source or columns option specified');
   }
@@ -5871,7 +5871,7 @@ DataMap.prototype.removeCol = function(index, amount) {
     data[r].splice(index, amount);
   }
   this.priv.columnSettings.splice(index, amount);
-  Handsontable.hooks.run(this.instance, 'afterRemoveCol', index, amount);
+  Handsontable.hooks.run(this.instance, 'afterRemoveCol', index, amount, source);
   this.instance.forceFullRender = true;
 };
 DataMap.prototype.spliceCol = function(col, index, amount) {
@@ -27192,5 +27192,5 @@ if (typeof exports !== "undefined") {
 })(function() {
   return this || window;
 }());
-},{}]},{},[23,57,59,58,60,81,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,82,83,84,85,98,99,100,88,89,90,91,92,93,30,34,31,32,39,33,35,36,37,38])("zeroclipboard")
+},{}]},{},[23,57,58,59,60,81,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,82,83,84,85,98,99,100,88,89,90,91,92,93,30,34,31,32,39,33,35,36,37,38])("zeroclipboard")
 });
