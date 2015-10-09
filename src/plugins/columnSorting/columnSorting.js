@@ -249,12 +249,19 @@ class ColumnSorting extends BasePlugin {
   defaultSort(sortOrder) {
     return function(a, b) {
       if (typeof a[1] == 'string') {
-        a[1] = a[1].toLowerCase();
+        if (a[1] === '' || isNaN(Number(a[1]))) {
+          a[1] = a[1].toLowerCase();
+        } else {
+          a[1] = Number(a[1]);
+        }
       }
       if (typeof b[1] == 'string') {
-        b[1] = b[1].toLowerCase();
+        if (b[1] === '' || isNaN(Number(b[1]))) {
+          b[1] = b[1].toLowerCase();
+        } else {
+          b[1] = Number(b[1]);
+        }
       }
-
       if (a[1] === b[1]) {
         return 0;
       }

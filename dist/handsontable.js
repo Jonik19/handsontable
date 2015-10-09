@@ -7,13 +7,13 @@
  * Licensed under the MIT license.
  * http://handsontable.com/
  *
- * Date: Wed Oct 07 2015 19:02:54 GMT+0300 (EEST)
+ * Date: Fri Oct 09 2015 11:17:51 GMT+0300 (EEST)
  */
 /*jslint white: true, browser: true, plusplus: true, indent: 4, maxerr: 50 */
 
 window.Handsontable = {
   version: '0.19.0',
-  buildDate: 'Wed Oct 07 2015 19:02:54 GMT+0300 (EEST)',
+  buildDate: 'Fri Oct 09 2015 11:17:51 GMT+0300 (EEST)',
 };
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Handsontable = f()}})(function(){var define,module,exports;return (function init(modules, cache, entry) {
   (function outer (modules, cache, entry) {
@@ -11375,10 +11375,18 @@ var $ColumnSorting = ColumnSorting;
   defaultSort: function(sortOrder) {
     return function(a, b) {
       if (typeof a[1] == 'string') {
-        a[1] = a[1].toLowerCase();
+        if (a[1] === '' || isNaN(Number(a[1]))) {
+          a[1] = a[1].toLowerCase();
+        } else {
+          a[1] = Number(a[1]);
+        }
       }
       if (typeof b[1] == 'string') {
-        b[1] = b[1].toLowerCase();
+        if (b[1] === '' || isNaN(Number(b[1]))) {
+          b[1] = b[1].toLowerCase();
+        } else {
+          b[1] = Number(b[1]);
+        }
       }
       if (a[1] === b[1]) {
         return 0;
