@@ -7,13 +7,13 @@
  * Licensed under the MIT license.
  * http://handsontable.com/
  *
- * Date: Fri Oct 09 2015 11:17:51 GMT+0300 (EEST)
+ * Date: Tue Oct 13 2015 12:52:16 GMT+0300 (EEST)
  */
 /*jslint white: true, browser: true, plusplus: true, indent: 4, maxerr: 50 */
 
 window.Handsontable = {
   version: '0.19.0',
-  buildDate: 'Fri Oct 09 2015 11:17:51 GMT+0300 (EEST)',
+  buildDate: 'Tue Oct 13 2015 12:52:16 GMT+0300 (EEST)',
 };
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Handsontable = f()}})(function(){var define,module,exports;return (function init(modules, cache, entry) {
   (function outer (modules, cache, entry) {
@@ -11211,6 +11211,7 @@ var BasePlugin = ($___46__46__47__95_base__ = require("_base"), $___46__46__47__
 var registerPlugin = ($___46__46__47__46__46__47_plugins__ = require("plugins"), $___46__46__47__46__46__47_plugins__ && $___46__46__47__46__46__47_plugins__.__esModule && $___46__46__47__46__46__47_plugins__ || {default: $___46__46__47__46__46__47_plugins__}).registerPlugin;
 Handsontable.hooks.register('beforeColumnSort');
 Handsontable.hooks.register('afterColumnSort');
+Handsontable.ColumnSortingPlugin = ColumnSorting;
 var ColumnSorting = function ColumnSorting(hotInstance) {
   $traceurRuntime.superConstructor($ColumnSorting).call(this, hotInstance);
   this.sortIndicators = [];
